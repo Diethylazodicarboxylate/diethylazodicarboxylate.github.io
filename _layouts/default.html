@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <!--
+          <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
+        -->
+        <p class="center">
+        {% if site.logo %}
+          <img class="logo" src="{{site.logo | relative_url}}" alt="r3kapig" style="cursor:pointer;" onclick="location.replace('/')" />
+        {% endif %}
+        </p>
+        <p class="center">{{ site.description | default: site.github.project_tagline }}</p>
+
+        {% if site.show_downloads %}
+        <ul class="other site">
+          <li>&#128681; <a href="https://ctftime.org/team/367609" class="btn">CTFTime</a></li>
+          <li>&#128218; <a href="/writeup/" class="btn">Writeup</a></li>
+          {% if page.id == 'index' %}
+          <li>&#128373; <a href="#team-members" class="btn">Members</a></li>
+          <li>&#128008; <a href="https://github.com/Diethylazodicarboxylate">GitHub</a></li>
+          <li>&#128038; <a href="https://twitter.com/0xdeadcats" class="btn">Twitter</a></li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </header>
+      <section>
+      {{ content }}
+      </section>
+    </div>
+    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+    {% if page.g6 %}
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@antv/g6@4.5.2/dist/g6.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ "/assets/js/tree.js" | relative_url }}" charset="utf-8"></script>
+    {% endif %}
+    {% if site.google_analytics %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', '{{ site.google_analytics }}', 'auto');
+      ga('send', 'pageview');
+    </script>
+    {% endif %}
+  </body>
+</html>

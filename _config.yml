@@ -1,0 +1,20 @@
+title: deadcats
+logo: /assets/img/logo.png
+description: Just Bunch Of Cooked People.
+show_downloads: true
+google_analytics:
+exclude: ['_site', 'node_modules', 'script', 'LICENSE', 'README.md']
+
+collections:
+  writeup:
+    output: true
+    permalink: /writeup/:title/
+
+# ✅ Syntax Highlighting
+highlighter: rouge
+markdown: kramdown
+
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'

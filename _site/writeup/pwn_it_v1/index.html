@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <!--
+          <h1><a href="http://localhost:4000/">deadcats</a></h1>
+        -->
+        <p class="center">
+        
+          <img class="logo" src="/assets/img/logo.png" alt="r3kapig" style="cursor:pointer;" onclick="location.replace('/')" />
+        
+        </p>
+        <p class="center">Just Bunch Of Cooked People.</p>
+
+        
+        <ul class="other site">
+          <li>&#128681; <a href="https://ctftime.org/team/367609" class="btn">CTFTime</a></li>
+          <li>&#128218; <a href="/writeup/" class="btn">Writeup</a></li>
+          
+        </ul>
+        
+      </header>
+      <section>
+      <h1 id="installation">Installation</h1>
+
+<h4 id="docker">Docker</h4>
+
+<ul>
+  <li>Install docker by using: sudo pacman -S docker in arch or sudo apt install docker in debain based OS.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">)]</span> % <span class="nb">sudo </span>pacman <span class="nt">-S</span> docker
+</code></pre></div></div>
+
+<h4 id="starting-docker">Starting Docker</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">)]</span> % <span class="nb">sudo </span>systemctl start docker
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">)]</span> % <span class="nb">sudo </span>systemctl <span class="nb">enable </span>docker
+</code></pre></div></div>
+
+<ul>
+  <li>First command start the docker and second command makes command start after boot automatically.</li>
+</ul>
+
+<h4 id="pulling-from-docker">Pulling from docker</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">)]</span> % <span class="nb">sudo </span>docker pull 0x7375646f/pwn_it_v1                          
+Using default tag: latest
+latest: Pulling from 0x7375646f/pwn_it_v1
+Digest: sha256:933a52d4b7d21e5fd93ce71400f7086780bbef19fe81df556540a8d77a46c5ca
+Status: Image is up to <span class="nb">date </span><span class="k">for </span>0x7375646f/pwn_it_v1:latest
+docker.io/0x7375646f/pwn_it_v1:latest
+</code></pre></div></div>
+
+<h4 id="testing-program">Testing Program</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">(]</span> % <span class="nb">sudo </span>docker run <span class="nt">-it</span> 0x7375646f/pwn_it_v1                       
+Enter username: admin
+Enter password: 
+Access denied!
+</code></pre></div></div>
+
+<ul>
+  <li>After running it we can see that it gives access denied everytime.</li>
+</ul>
+
+<h4 id="getting-shell">Getting Shell</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">(]</span> % <span class="nb">sudo </span>docker run <span class="nt">-it</span> <span class="nt">--entrypoint</span> /bin/bash 0x7375646f/pwn_it_v1
+root@9aad99c650d5:/# 
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">--entrypoint /bin/bash</code>: Specifies the entrypoint for the container. Instead of running the default command for the image, it overrides it and runs <code class="language-plaintext highlighter-rouge">/bin/bash</code> (the shell) when the container starts.</li>
+</ul>
+
+<h4 id="exploring">Exploring</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@9aad99c650d5:/ <span class="nb">ls
+</span>auth.sh  bin  boot  dev  etc  home  lib  lib.usr-is-merged  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@9aad99c650d5:/ <span class="nb">cat </span>auth.sh
+<span class="c">#!/bin/bash</span>
+<span class="nb">read</span> <span class="nt">-p</span> <span class="s2">"Enter username: "</span> user
+<span class="nb">read</span> <span class="nt">-sp</span> <span class="s2">"Enter password: "</span> pass
+<span class="nb">echo</span> <span class="s2">""</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$user</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"MrRobot"</span> <span class="o">&amp;&amp;</span> <span class="s2">"</span><span class="nv">$pass</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"h4cked"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Authentication successful!"</span>
+    <span class="nb">exec</span> /bin/bash
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"Access denied!"</span>
+    <span class="nb">exit </span>1
+<span class="k">fi
+</span>root@9aad99c650d5:/# 
+</code></pre></div></div>
+
+<ul>
+  <li>So that was the program that was running as we can see the username and password was <code class="language-plaintext highlighter-rouge">MrRobot</code> and <code class="language-plaintext highlighter-rouge">h4cked</code> of before program.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@9aad99c650d5:/ <span class="nb">whoami  
+</span>root
+root@9aad99c650d5:/ <span class="nb">cd</span> /root
+root@9aad99c650d5:~ <span class="nb">ls</span> <span class="nt">-la</span>
+total 16
+drwx------ 1 root root   58 Jan 24 04:31  <span class="nb">.</span>
+drwxr-xr-x 1 root root    0 Mar 23 16:21  ..
+<span class="nt">-rw-------</span> 1 root root   63 Jan 24 04:31  .bash_history
+<span class="nt">-rw-r--r--</span> 1 root root 3106 Apr 22  2024  .bashrc
+<span class="nt">-rw-r--r--</span> 1 root root   81 Jan 24 04:22 <span class="s1">'.flag?.txt'</span>
+drwxr-xr-x 1 root root   10 Jan 24 04:19  .local
+<span class="nt">-rw-r--r--</span> 1 root root  161 Apr 22  2024  .profile
+</code></pre></div></div>
+
+<ul>
+  <li>Since I am root i have all permissions, I went to <code class="language-plaintext highlighter-rouge">/root</code> directory and used <code class="language-plaintext highlighter-rouge">ls -la</code> to list all the files (even hidden) that were in that directory.</li>
+  <li>We can see <code class="language-plaintext highlighter-rouge">'.flag?.txt'</code></li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@9aad99c650d5:~ <span class="nb">cat</span> <span class="s1">'.flag?.txt'</span>
+Hm interesting thing that i dk too. Try figuring out bruh.
+FQkCFR4REhYaLQMYEgIe
+</code></pre></div></div>
+
+<ul>
+  <li>It seems like a encrypted message, lets note it.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FQkCFR4REhYaLQMYEgIe
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@9aad99c650d5:~ <span class="nb">cd</span> /var
+root@9aad99c650d5:/var <span class="nb">ls
+</span>backups  cache  lib  <span class="nb">local  </span>lock  log  mail  opt  run  spool  tmp  www
+root@9aad99c650d5:/var <span class="nb">cd </span>www
+root@9aad99c650d5:/var/www <span class="nb">ls    
+</span>html
+root@9aad99c650d5:/var/www <span class="nb">cd </span>html
+root@9aad99c650d5:/var/www/html <span class="nb">ls
+</span>index.html
+</code></pre></div></div>
+
+<ul>
+  <li>I went to <code class="language-plaintext highlighter-rouge">/var/www/html</code> directory and there was a <code class="language-plaintext highlighter-rouge">index.html</code> file.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@9aad99c650d5:/var/www/html <span class="nb">cat </span>index.html | <span class="nb">head</span>
+&lt;<span class="o">!</span>DOCTYPE html PUBLIC <span class="s2">"-//W3C//DTD XHTML 1.0 Transitional//EN"</span> <span class="s2">"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"</span><span class="o">&gt;</span>
+&lt;html <span class="nv">xmlns</span><span class="o">=</span><span class="s2">"http://www.w3.org/1999/xhtml"</span><span class="o">&gt;</span>
+  &lt;<span class="o">!</span><span class="nt">--</span>
+    Modified from the Debian original <span class="k">for </span>Ubuntu
+    Last updated: 2022-03-22
+    See: https://launchpad.net/bugs/1966004
+  <span class="nt">--</span><span class="o">&gt;</span>
+  &lt;script&gt;
+const <span class="nv">_0x2f4991</span><span class="o">=</span>_0xda93<span class="p">;</span><span class="o">(</span><span class="k">function</span><span class="o">(</span>_0x1d0601,_0x39d9f6<span class="o">){</span>const <span class="nv">_0x1ead35</span><span class="o">=</span>_0xda93,_0xadfc19<span class="o">=</span>_0x1d0601<span class="o">()</span><span class="p">;</span><span class="k">while</span><span class="o">(!![]){</span>try<span class="o">{</span>const <span class="nv">_0x4901d6</span><span class="o">=</span>parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x9a<span class="o">))</span>/0x1<span class="k">*</span><span class="o">(</span><span class="nt">-parseInt</span><span class="o">(</span>_0x1ead35<span class="o">(</span>0x9e<span class="o">))</span>/0x2<span class="o">)</span>+parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0xa2<span class="o">))</span>/0x3<span class="k">*</span><span class="o">(</span>parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x94<span class="o">))</span>/0x4<span class="o">)</span>+parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x9b<span class="o">))</span>/0x5+-parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x93<span class="o">))</span>/0x6<span class="k">*</span><span class="o">(</span>parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0xa1<span class="o">))</span>/0x7<span class="o">)</span>+parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x98<span class="o">))</span>/0x8+parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x95<span class="o">))</span>/0x9<span class="k">*</span><span class="o">(</span><span class="nt">-parseInt</span><span class="o">(</span>_0x1ead35<span class="o">(</span>0xa0<span class="o">))</span>/0xa<span class="o">)</span>+parseInt<span class="o">(</span>_0x1ead35<span class="o">(</span>0x9f<span class="o">))</span>/0xb<span class="p">;</span><span class="k">if</span><span class="o">(</span><span class="nv">_0x4901d6</span><span class="o">===</span>_0x39d9f6<span class="o">)</span><span class="nb">break</span><span class="p">;</span><span class="k">else </span>_0xadfc19[<span class="s1">'push'</span><span class="o">](</span>_0xadfc19[<span class="s1">'shift'</span><span class="o">]())</span><span class="p">;</span><span class="o">}</span>catch<span class="o">(</span>_0x40e265<span class="o">){</span>_0xadfc19[<span class="s1">'push'</span><span class="o">](</span>_0xadfc19[<span class="s1">'shift'</span><span class="o">]())</span><span class="p">;</span><span class="o">}}}(</span>_0x2c1b,0x31c70<span class="o">))</span><span class="p">;</span><span class="k">function </span>_0x2c1b<span class="o">(){</span>const <span class="nv">_0x21f031</span><span class="o">=[</span><span class="s1">'54gtRCwl'</span>,<span class="s1">'62156svkzYZ'</span>,<span class="s1">'135IzweGB'</span>,<span class="s1">'length'</span>,<span class="s1">'secret'</span>,<span class="s1">'66616jEDToV'</span>,<span class="s1">'charCodeAt'</span>,<span class="s1">'1052pdFxYA'</span>,<span class="s1">'1337615XeHUMx'</span>,<span class="s1">'fromCharCode'</span>,<span class="s1">'heregoesyoursecret'</span>,<span class="s1">'210izgAhV'</span>,<span class="s1">'3161235SqXoEW'</span>,<span class="s1">'78920cKXHnz'</span>,<span class="s1">'149849KcHRic'</span>,<span class="s1">'12BFlisG'</span>,<span class="s1">'log'</span><span class="o">]</span><span class="p">;</span><span class="nv">_0x2c1b</span><span class="o">=</span><span class="k">function</span><span class="o">(){</span><span class="k">return </span>_0x21f031<span class="p">;</span><span class="o">}</span><span class="p">;</span><span class="k">return </span>_0x2c1b<span class="o">()</span><span class="p">;</span><span class="o">}</span><span class="k">function </span>xorEncryptDecrypt<span class="o">(</span>_0x2163d6,_0x2a5337<span class="o">){</span>const <span class="nv">_0x22ffae</span><span class="o">=</span>_0xda93<span class="p">;</span><span class="nb">let </span><span class="nv">_0x256bda</span><span class="o">=</span><span class="s1">''</span><span class="p">;</span><span class="k">for</span><span class="o">(</span><span class="nb">let </span><span class="nv">_0x4c4d57</span><span class="o">=</span>0x0<span class="p">;</span>_0x4c4d57&lt;_0x2163d6[_0x22ffae<span class="o">(</span>0x96<span class="o">)]</span><span class="p">;</span>_0x4c4d57++<span class="o">){</span>_0x256bda+<span class="o">=</span>String[_0x22ffae<span class="o">(</span>0x9c<span class="o">)](</span>_0x2163d6[_0x22ffae<span class="o">(</span>0x99<span class="o">)](</span>_0x4c4d57<span class="o">)</span>^_0x2a5337[_0x22ffae<span class="o">(</span>0x99<span class="o">)](</span>_0x4c4d57%_0x2a5337[_0x22ffae<span class="o">(</span>0x96<span class="o">)]))</span><span class="p">;</span><span class="o">}</span><span class="k">return </span>_0x256bda<span class="p">;</span><span class="o">}</span><span class="k">function </span>_0xda93<span class="o">(</span>_0x208bc9,_0x130d3e<span class="o">){</span>const <span class="nv">_0x2c1bd3</span><span class="o">=</span>_0x2c1b<span class="o">()</span><span class="p">;</span><span class="k">return </span><span class="nv">_0xda93</span><span class="o">=</span><span class="k">function</span><span class="o">(</span>_0xda935c,_0xcc38eb<span class="o">){</span><span class="nv">_0xda935c</span><span class="o">=</span>_0xda935c-0x92<span class="p">;</span><span class="nb">let </span><span class="nv">_0x125462</span><span class="o">=</span>_0x2c1bd3[_0xda935c]<span class="p">;</span><span class="k">return </span>_0x125462<span class="p">;</span><span class="o">}</span>,_0xda93<span class="o">(</span>_0x208bc9,_0x130d3e<span class="o">)</span><span class="p">;</span><span class="o">}</span>const <span class="nv">key</span><span class="o">=</span>_0x2f4991<span class="o">(</span>0x97<span class="o">)</span>,encrypted<span class="o">=</span>_0x2f4991<span class="o">(</span>0x9d<span class="o">)</span>,decrypted<span class="o">=</span>xorEncryptDecrypt<span class="o">(</span>atob<span class="o">(</span>encrypted<span class="o">)</span>,key<span class="o">)</span><span class="p">;</span>console[_0x2f4991<span class="o">(</span>0x92<span class="o">)](</span><span class="s1">'Decrypted:'</span>,decrypted<span class="o">)</span><span class="p">;</span>
+&lt;/script&gt;
+</code></pre></div></div>
+
+<ul>
+  <li>I used command <code class="language-plaintext highlighter-rouge">cat index.html | head</code>. <code class="language-plaintext highlighter-rouge">cat</code> is used to view the content while i used <code class="language-plaintext highlighter-rouge">|</code> symbol to pipe or use two commands together and i used <code class="language-plaintext highlighter-rouge">head</code> command to see only top of few content of that file since full file has too much code.</li>
+  <li>That code starting from <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> seems like a obfuscated javascript code.</li>
+  <li>We can decode it by going online in obfuscated decoder.</li>
+  <li>I used this site <a href="https://matthewfl.com/unPacker.html">Unpacker</a></li>
+  <li>After putting our code this there in site:</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">_0x2f4991</span><span class="o">=</span><span class="nx">_0xda93</span><span class="p">;(</span><span class="kd">function</span><span class="p">(</span><span class="nx">_0x1d0601</span><span class="p">,</span><span class="nx">_0x39d9f6</span><span class="p">){</span><span class="kd">const</span> <span class="nx">_0x1ead35</span><span class="o">=</span><span class="nx">_0xda93</span><span class="p">,</span><span class="nx">_0xadfc19</span><span class="o">=</span><span class="nf">_0x1d0601</span><span class="p">();</span><span class="k">while</span><span class="p">(</span><span class="o">!!</span><span class="p">[]){</span><span class="k">try</span><span class="p">{</span><span class="kd">const</span> <span class="nx">_0x4901d6</span><span class="o">=</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9a</span><span class="p">))</span><span class="o">/</span><span class="mh">0x1</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9e</span><span class="p">))</span><span class="o">/</span><span class="mh">0x2</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0xa2</span><span class="p">))</span><span class="o">/</span><span class="mh">0x3</span><span class="o">*</span><span class="p">(</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x94</span><span class="p">))</span><span class="o">/</span><span class="mh">0x4</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9b</span><span class="p">))</span><span class="o">/</span><span class="mh">0x5</span><span class="o">+-</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x93</span><span class="p">))</span><span class="o">/</span><span class="mh">0x6</span><span class="o">*</span><span class="p">(</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0xa1</span><span class="p">))</span><span class="o">/</span><span class="mh">0x7</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x98</span><span class="p">))</span><span class="o">/</span><span class="mh">0x8</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x95</span><span class="p">))</span><span class="o">/</span><span class="mh">0x9</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0xa0</span><span class="p">))</span><span class="o">/</span><span class="mh">0xa</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9f</span><span class="p">))</span><span class="o">/</span><span class="mh">0xb</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="nx">_0x4901d6</span><span class="o">===</span><span class="nx">_0x39d9f6</span><span class="p">)</span><span class="k">break</span><span class="p">;</span><span class="k">else</span> <span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">push</span><span class="dl">'</span><span class="p">](</span><span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">shift</span><span class="dl">'</span><span class="p">]());}</span><span class="k">catch</span><span class="p">(</span><span class="nx">_0x40e265</span><span class="p">){</span><span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">push</span><span class="dl">'</span><span class="p">](</span><span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">shift</span><span class="dl">'</span><span class="p">]());}}}(</span><span class="nx">_0x2c1b</span><span class="p">,</span><span class="mh">0x31c70</span><span class="p">));</span><span class="kd">function</span> <span class="nf">_0x2c1b</span><span class="p">(){</span><span class="kd">const</span> <span class="nx">_0x21f031</span><span class="o">=</span><span class="p">[</span><span class="dl">'</span><span class="s1">54gtRCwl</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">62156svkzYZ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">135IzweGB</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">length</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">secret</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">66616jEDToV</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">charCodeAt</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">1052pdFxYA</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">1337615XeHUMx</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">fromCharCode</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">heregoesyoursecret</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">210izgAhV</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">3161235SqXoEW</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">78920cKXHnz</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">149849KcHRic</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">12BFlisG</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">log</span><span class="dl">'</span><span class="p">];</span><span class="nx">_0x2c1b</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="nx">_0x21f031</span><span class="p">;};</span><span class="k">return</span> <span class="nf">_0x2c1b</span><span class="p">();}</span><span class="kd">function</span> <span class="nf">xorEncryptDecrypt</span><span class="p">(</span><span class="nx">_0x2163d6</span><span class="p">,</span><span class="nx">_0x2a5337</span><span class="p">){</span><span class="kd">const</span> <span class="nx">_0x22ffae</span><span class="o">=</span><span class="nx">_0xda93</span><span class="p">;</span><span class="kd">let</span> <span class="nx">_0x256bda</span><span class="o">=</span><span class="dl">''</span><span class="p">;</span><span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">_0x4c4d57</span><span class="o">=</span><span class="mh">0x0</span><span class="p">;</span><span class="nx">_0x4c4d57</span><span class="o">&lt;</span><span class="nx">_0x2163d6</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x96</span><span class="p">)];</span><span class="nx">_0x4c4d57</span><span class="o">++</span><span class="p">){</span><span class="nx">_0x256bda</span><span class="o">+=</span><span class="nb">String</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x9c</span><span class="p">)](</span><span class="nx">_0x2163d6</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x99</span><span class="p">)](</span><span class="nx">_0x4c4d57</span><span class="p">)</span><span class="o">^</span><span class="nx">_0x2a5337</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x99</span><span class="p">)](</span><span class="nx">_0x4c4d57</span><span class="o">%</span><span class="nx">_0x2a5337</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x96</span><span class="p">)]));}</span><span class="k">return</span> <span class="nx">_0x256bda</span><span class="p">;}</span><span class="kd">function</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="nx">_0x208bc9</span><span class="p">,</span><span class="nx">_0x130d3e</span><span class="p">){</span><span class="kd">const</span> <span class="nx">_0x2c1bd3</span><span class="o">=</span><span class="nf">_0x2c1b</span><span class="p">();</span><span class="k">return</span> <span class="nx">_0xda93</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">_0xda935c</span><span class="p">,</span><span class="nx">_0xcc38eb</span><span class="p">){</span><span class="nx">_0xda935c</span><span class="o">=</span><span class="nx">_0xda935c</span><span class="o">-</span><span class="mh">0x92</span><span class="p">;</span><span class="kd">let</span> <span class="nx">_0x125462</span><span class="o">=</span><span class="nx">_0x2c1bd3</span><span class="p">[</span><span class="nx">_0xda935c</span><span class="p">];</span><span class="k">return</span> <span class="nx">_0x125462</span><span class="p">;},</span><span class="nf">_0xda93</span><span class="p">(</span><span class="nx">_0x208bc9</span><span class="p">,</span><span class="nx">_0x130d3e</span><span class="p">);}</span><span class="kd">const</span> <span class="nx">key</span><span class="o">=</span><span class="nf">_0x2f4991</span><span class="p">(</span><span class="mh">0x97</span><span class="p">),</span><span class="nx">encrypted</span><span class="o">=</span><span class="nf">_0x2f4991</span><span class="p">(</span><span class="mh">0x9d</span><span class="p">),</span><span class="nx">decrypted</span><span class="o">=</span><span class="nf">xorEncryptDecrypt</span><span class="p">(</span><span class="nf">atob</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">),</span><span class="nx">key</span><span class="p">);</span><span class="nx">console</span><span class="p">[</span><span class="nf">_0x2f4991</span><span class="p">(</span><span class="mh">0x92</span><span class="p">)](</span><span class="dl">'</span><span class="s1">Decrypted:</span><span class="dl">'</span><span class="p">,</span><span class="nx">decrypted</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>After putting this we get:</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">_0x2f4991</span><span class="o">=</span><span class="nx">_0xda93</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">_0x1d0601</span><span class="p">,</span><span class="nx">_0x39d9f6</span><span class="p">)</span>
+	<span class="p">{</span>
+	<span class="kd">const</span> <span class="nx">_0x1ead35</span><span class="o">=</span><span class="nx">_0xda93</span><span class="p">,</span><span class="nx">_0xadfc19</span><span class="o">=</span><span class="nf">_0x1d0601</span><span class="p">();</span>
+	<span class="k">while</span><span class="p">(</span><span class="o">!!</span><span class="p">[])</span>
+		<span class="p">{</span>
+		<span class="k">try</span>
+			<span class="p">{</span>
+			<span class="kd">const</span> <span class="nx">_0x4901d6</span><span class="o">=</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9a</span><span class="p">))</span><span class="o">/</span><span class="mh">0x1</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9e</span><span class="p">))</span><span class="o">/</span><span class="mh">0x2</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0xa2</span><span class="p">))</span><span class="o">/</span><span class="mh">0x3</span><span class="o">*</span><span class="p">(</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x94</span><span class="p">))</span><span class="o">/</span><span class="mh">0x4</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9b</span><span class="p">))</span><span class="o">/</span><span class="mh">0x5</span><span class="o">+-</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x93</span><span class="p">))</span><span class="o">/</span><span class="mh">0x6</span><span class="o">*</span><span class="p">(</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0xa1</span><span class="p">))</span><span class="o">/</span><span class="mh">0x7</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x98</span><span class="p">))</span><span class="o">/</span><span class="mh">0x8</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x95</span><span class="p">))</span><span class="o">/</span><span class="mh">0x9</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0xa0</span><span class="p">))</span><span class="o">/</span><span class="mh">0xa</span><span class="p">)</span><span class="o">+</span><span class="nf">parseInt</span><span class="p">(</span><span class="nf">_0x1ead35</span><span class="p">(</span><span class="mh">0x9f</span><span class="p">))</span><span class="o">/</span><span class="mh">0xb</span><span class="p">;</span>
+			<span class="k">if</span><span class="p">(</span><span class="nx">_0x4901d6</span><span class="o">===</span><span class="nx">_0x39d9f6</span><span class="p">)</span><span class="k">break</span><span class="p">;</span>
+			<span class="k">else</span> <span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">push</span><span class="dl">'</span><span class="p">](</span><span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">shift</span><span class="dl">'</span><span class="p">]());</span>
+		<span class="p">}</span>
+		<span class="k">catch</span><span class="p">(</span><span class="nx">_0x40e265</span><span class="p">)</span>
+			<span class="p">{</span>
+			<span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">push</span><span class="dl">'</span><span class="p">](</span><span class="nx">_0xadfc19</span><span class="p">[</span><span class="dl">'</span><span class="s1">shift</span><span class="dl">'</span><span class="p">]());</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="p">(</span><span class="nx">_0x2c1b</span><span class="p">,</span><span class="mh">0x31c70</span><span class="p">));</span>
+<span class="kd">function</span> <span class="nf">_0x2c1b</span><span class="p">()</span>
+	<span class="p">{</span>
+	<span class="kd">const</span> <span class="nx">_0x21f031</span><span class="o">=</span><span class="p">[</span><span class="dl">'</span><span class="s1">54gtRCwl</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">62156svkzYZ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">135IzweGB</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">length</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">secret</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">66616jEDToV</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">charCodeAt</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">1052pdFxYA</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">1337615XeHUMx</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">fromCharCode</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">heregoesyoursecret</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">210izgAhV</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">3161235SqXoEW</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">78920cKXHnz</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">149849KcHRic</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">12BFlisG</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">log</span><span class="dl">'</span><span class="p">];</span>
+	<span class="nx">_0x2c1b</span><span class="o">=</span><span class="kd">function</span><span class="p">()</span>
+		<span class="p">{</span>
+		<span class="k">return</span> <span class="nx">_0x21f031</span><span class="p">;</span>
+	<span class="p">};</span>
+	<span class="k">return</span> <span class="nf">_0x2c1b</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nf">xorEncryptDecrypt</span><span class="p">(</span><span class="nx">_0x2163d6</span><span class="p">,</span><span class="nx">_0x2a5337</span><span class="p">)</span>
+	<span class="p">{</span>
+	<span class="kd">const</span> <span class="nx">_0x22ffae</span><span class="o">=</span><span class="nx">_0xda93</span><span class="p">;</span>
+	<span class="kd">let</span> <span class="nx">_0x256bda</span><span class="o">=</span><span class="dl">''</span><span class="p">;</span>
+	<span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">_0x4c4d57</span><span class="o">=</span><span class="mh">0x0</span><span class="p">;</span>
+	<span class="nx">_0x4c4d57</span><span class="o">&lt;</span><span class="nx">_0x2163d6</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x96</span><span class="p">)];</span>
+	<span class="nx">_0x4c4d57</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+		<span class="nx">_0x256bda</span><span class="o">+=</span><span class="nb">String</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x9c</span><span class="p">)](</span><span class="nx">_0x2163d6</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x99</span><span class="p">)](</span><span class="nx">_0x4c4d57</span><span class="p">)</span><span class="o">^</span><span class="nx">_0x2a5337</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x99</span><span class="p">)](</span><span class="nx">_0x4c4d57</span><span class="o">%</span><span class="nx">_0x2a5337</span><span class="p">[</span><span class="nf">_0x22ffae</span><span class="p">(</span><span class="mh">0x96</span><span class="p">)]));</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">_0x256bda</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="nx">_0x208bc9</span><span class="p">,</span><span class="nx">_0x130d3e</span><span class="p">)</span>
+	<span class="p">{</span>
+	<span class="kd">const</span> <span class="nx">_0x2c1bd3</span><span class="o">=</span><span class="nf">_0x2c1b</span><span class="p">();</span>
+	<span class="k">return</span> <span class="nx">_0xda93</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">_0xda935c</span><span class="p">,</span><span class="nx">_0xcc38eb</span><span class="p">)</span>
+		<span class="p">{</span>
+		<span class="nx">_0xda935c</span><span class="o">=</span><span class="nx">_0xda935c</span><span class="o">-</span><span class="mh">0x92</span><span class="p">;</span>
+		<span class="kd">let</span> <span class="nx">_0x125462</span><span class="o">=</span><span class="nx">_0x2c1bd3</span><span class="p">[</span><span class="nx">_0xda935c</span><span class="p">];</span>
+		<span class="k">return</span> <span class="nx">_0x125462</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="p">,</span><span class="nf">_0xda93</span><span class="p">(</span><span class="nx">_0x208bc9</span><span class="p">,</span><span class="nx">_0x130d3e</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">const</span> <span class="nx">key</span><span class="o">=</span><span class="nf">_0x2f4991</span><span class="p">(</span><span class="mh">0x97</span><span class="p">),</span><span class="nx">encrypted</span><span class="o">=</span><span class="nf">_0x2f4991</span><span class="p">(</span><span class="mh">0x9d</span><span class="p">),</span><span class="nx">decrypted</span><span class="o">=</span><span class="nf">xorEncryptDecrypt</span><span class="p">(</span><span class="nf">atob</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">),</span><span class="nx">key</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">[</span><span class="nf">_0x2f4991</span><span class="p">(</span><span class="mh">0x92</span><span class="p">)](</span><span class="dl">'</span><span class="s1">Decrypted:</span><span class="dl">'</span><span class="p">,</span><span class="nx">decrypted</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>It still looks scary so lets add comments and change hex to strings.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Helper function to retrieve values from the string array</span>
+<span class="kd">function</span> <span class="nf">_0x2c1b</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">_0x21f031</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="dl">'</span><span class="s1">54gtRCwl</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">62156svkzYZ</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">135IzweGB</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">length</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">secret</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">66616jEDToV</span><span class="dl">'</span><span class="p">,</span> 
+        <span class="dl">'</span><span class="s1">charCodeAt</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">1052pdFxYA</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">1337615XeHUMx</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">fromCharCode</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">heregoesyoursecret</span><span class="dl">'</span><span class="p">,</span> 
+        <span class="dl">'</span><span class="s1">210izgAhV</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">3161235SqXoEW</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">78920cKXHnz</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">149849KcHRic</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">12BFlisG</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">log</span><span class="dl">'</span>
+    <span class="p">];</span>
+    <span class="nx">_0x2c1b</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">_0x21f031</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="nf">_0x2c1b</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to map hexadecimal indices to strings</span>
+<span class="kd">function</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">_0x2c1bd3</span> <span class="o">=</span> <span class="nf">_0x2c1b</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">_0xda93</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">adjustedIndex</span><span class="p">,</span> <span class="nx">_</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">adjustedIndex</span> <span class="o">=</span> <span class="nx">adjustedIndex</span> <span class="o">-</span> <span class="mh">0x92</span><span class="p">;</span> <span class="c1">// Adjust the index</span>
+        <span class="k">return</span> <span class="nx">_0x2c1bd3</span><span class="p">[</span><span class="nx">adjustedIndex</span><span class="p">];</span>
+    <span class="p">},</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">_</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// XOR encryption/decryption function</span>
+<span class="kd">function</span> <span class="nf">xorEncryptDecrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">decrypted</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">decrypted</span> <span class="o">+=</span> <span class="nb">String</span><span class="p">.</span><span class="nf">fromCharCode</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nf">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">^</span> <span class="nx">key</span><span class="p">.</span><span class="nf">charCodeAt</span><span class="p">(</span><span class="nx">i</span> <span class="o">%</span> <span class="nx">key</span><span class="p">.</span><span class="nx">length</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">decrypted</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Retrieve the key and encrypted message</span>
+<span class="kd">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="mh">0x97</span><span class="p">);</span> <span class="c1">// 'secret'</span>
+<span class="kd">const</span> <span class="nx">encrypted</span> <span class="o">=</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="mh">0x9d</span><span class="p">);</span> <span class="c1">// 'FQkCFR4REhYaLQMYEgIe'</span>
+
+<span class="c1">// Decode the base64-encoded encrypted message</span>
+<span class="kd">const</span> <span class="nx">decodedEncrypted</span> <span class="o">=</span> <span class="nf">atob</span><span class="p">(</span><span class="nx">encrypted</span><span class="p">);</span>
+
+<span class="c1">// Decrypt the message using the XOR function</span>
+<span class="kd">const</span> <span class="nx">decrypted</span> <span class="o">=</span> <span class="nf">xorEncryptDecrypt</span><span class="p">(</span><span class="nx">decodedEncrypted</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>
+
+<span class="c1">// Output the decrypted message</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Decrypted:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">decrypted</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>It uses XOR operation for obfuscation.</li>
+  <li>Remember it <code class="language-plaintext highlighter-rouge">FQkCFR4REhYaLQMYEgIe</code> Its the encrypted message and <code class="language-plaintext highlighter-rouge">secret</code> is the key</li>
+  <li>So we can write a simple python script to do convert above JS code to convert to python code to decrypt.</li>
+  <li>You can use <a href="https://chat.deepseek.com/">Deepseek</a> for it.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
+
+<span class="c1"># Constants and helper functions
+</span><span class="k">def</span> <span class="nf">_0x2c1b</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">[</span><span class="sh">'</span><span class="s">54gtRCwl</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">62156svkzYZ</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">135IzweGB</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">length</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">secret</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">66616jEDToV</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">charCodeAt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">1052pdFxYA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">1337615XeHUMx</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">fromCharCode</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">heregoesyoursecret</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">210izgAhV</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">3161235SqXoEW</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">78920cKXHnz</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">149849KcHRic</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">12BFlisG</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">log</span><span class="sh">'</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="n">_0x2c1bd3</span> <span class="o">=</span> <span class="nf">_0x2c1b</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">_0x2c1bd3</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mh">0x92</span><span class="p">]</span>
+
+<span class="c1"># XOR encryption/decryption function
+</span><span class="k">def</span> <span class="nf">xor_encrypt_decrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="n">decrypted</span> <span class="o">=</span> <span class="sh">''</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+        <span class="n">decrypted</span> <span class="o">+=</span> <span class="nf">chr</span><span class="p">(</span><span class="nf">ord</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">^</span> <span class="nf">ord</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nf">len</span><span class="p">(</span><span class="n">key</span><span class="p">)]))</span>
+    <span class="k">return</span> <span class="n">decrypted</span>
+
+<span class="c1"># Main execution
+</span><span class="n">key</span> <span class="o">=</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="mh">0x97</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>  <span class="c1"># 'secret'
+</span><span class="n">encrypted</span> <span class="o">=</span> <span class="nf">_0xda93</span><span class="p">(</span><span class="mh">0x9d</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>  <span class="c1"># 'heregoesyoursecret'
+</span>
+<span class="c1"># Decode the base64 encoded encrypted string
+</span><span class="n">encrypted_decoded</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">encrypted</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="sh">'</span><span class="s">utf-8</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Decrypt the data
+</span><span class="n">decrypted</span> <span class="o">=</span> <span class="nf">xor_encrypt_decrypt</span><span class="p">(</span><span class="n">encrypted_decoded</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+<span class="c1"># Output the decrypted data
+</span><span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Decrypted:</span><span class="sh">'</span><span class="p">,</span> <span class="n">decrypted</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="getting-flag">Getting Flag</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>╰─[:<span class="o">)]</span> % python3 main.py
+Decrypted: flag<span class="o">{</span>easy_flag<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>When we run the python script we get flag <code class="language-plaintext highlighter-rouge">flag{easy_flag}</code></li>
+</ul>
+
+<h4 id="author-at0m">Author: At0m</h4>
+
+<hr />
+
+
+      </section>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+    
+    
+  </body>
+</html>
